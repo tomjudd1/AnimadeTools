@@ -66,16 +66,18 @@ if (anmd_onion_Data.comp){
 		onionLayer.name = anmd_onion_Data.layerName;
 		onionLayer.startTime = 0;
 		onionLayer.adjustmentLayer = true;
-		onionLayer.locked = false;	
 		onionLayer.label = 0;	
 		onionLayer.shy = true;	
 		onionLayer.guideLayer = true;
 		onionLayer.property("Effects").addProperty("CC Wide Time");
 		allLayers = anmd_onion_Data.comp.layers;
 		onionLayer.moveBefore(allLayers[1]);
+		onionLayer.locked = true;
 	}else{
+		onionLayer.locked = false;
 		onionLayer.enabled = !onionLayer.enabled;
 		onionLayer.moveBefore(allLayers[1]);
+		onionLayer.locked = true;
 	}
 
 }
