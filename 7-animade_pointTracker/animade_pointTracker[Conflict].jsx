@@ -132,12 +132,12 @@ if (animade_pointTracker_Data.comp){
 			}
 
 			// move the track to above the target layer
-			//trackNull.moveBefore(targetLayer);
+			trackNull.moveBefore(targetLayer);
 			// set the trackers pertent to the target layer
 			trackNull.setParentWithJump(targetLayer);
 
 			// Run the function to do the tracking 
-			// animade_pointTracker_trackPoint(path, trackNull);	
+			animade_pointTracker_trackPoint(path, trackNull);	
 
 		}
 
@@ -161,13 +161,20 @@ if (animade_pointTracker_Data.comp){
 
 			// get layer
 			var targetLayer;
+
 			// Look for target Layer
 			var allLayers = animade_pointTracker_Data.comp.layers;
+
+
+
+
 			for (var j=1; j <= allLayers.length; j++) {
+
 				if (allLayers[j].name == str[0]) {
-					targetLayer = allLayers[j];
+					targetLayer = allLayers[j];		
 				}
 			}
+			
 
 			// get shape
 			var shapeLayer;
@@ -175,6 +182,7 @@ if (animade_pointTracker_Data.comp){
 
 			var s = str[1];
 			//var s = "L";
+
 
 			var path = targetLayer.property("Contents").property(str[1]).property("Contents").property(str[2]);
 	  		
@@ -200,8 +208,9 @@ function animade_pointTracker_trackPoint(targetPath, trackNull){
 	var keyPositionValues = [];
 	var keyRotationValues = [];
 
-	// get end vert
 
+
+	// get end vert
 	var startKey = true;
 	var noKey = false;
 	var pathShape;
@@ -221,14 +230,16 @@ function animade_pointTracker_trackPoint(targetPath, trackNull){
 	var startKeyTime = path.property("ADBE Vector Shape").keyTime(1);
 	var endKeyTime = path.property("ADBE Vector Shape").keyTime(numberKeys);
 
+	writeLn(numberKeys);
 
-	
 	// start at work area start - limit to work area end - increase by in frame;
 
 	for (var t = Math.max(targetLayer.inPoint,animade_pointTracker_Data.comp.workAreaStart); t < Math.min(targetLayer.outPoint,animade_pointTracker_Data.comp.workAreaStart + animade_pointTracker_Data.comp.workAreaDuration) + 0.001; t += animade_pointTracker_Data.keyInt * animade_pointTracker_Data.comp.frameDuration) 
 	{
 
 		// IS TRACKING ENABLED? If not then delete all keys at this time and move to next frame
+
+
 
 		if(t > (endKeyTime + animade_pointTracker_Data.comp.frameDuration) || t < startKeyTime - animade_pointTracker_Data.comp.frameDuration){
 			noKey = true;

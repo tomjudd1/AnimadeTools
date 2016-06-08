@@ -42,7 +42,6 @@ anmd_taper_Data.ex_1 = "";
 // Names
 anmd_taper_Data.taperGroupName = "Animade Taper";
 
-anmd_taper_Data.searchTerm = "Taper";
 // Errors
 anmd_taper_Data.noPathSel = "Select a path to taper";
 anmd_taper_Data.tapersOn = "Tapers turned off";
@@ -62,23 +61,19 @@ if (anmd_taper_Data.comp){
 		
 	// Look for comps with tapered layers in em!
 	var allComps = anmd_taper_Data.comps;
-
-	alert(allComps.length);
-
 	for (var i=1; i <= allComps.length; i++) {
-
-		if (allComps[i].label == 13) {		 
-
+		if (allComps[i].label == 13) {
+			
 			var thisComp = allComps[i];
 			// Look for taper layer and add to taperLayers array
 			var allLayers = thisComp.layers;
-			for (var j=1; j <= allLayers.length; j++) {
-				if (allLayers[j].label == 13) {
-
-					anmd_taper_Data.taperLayers.push(allLayers[j]);
+			for (var i=1; i <= allLayers.length; i++) {
+				if (allLayers[i].label == 13) {
+					anmd_taper_Data.taperLayers.push(allLayers[i]);
+					writeLn("taper layer found");
 				}
 			}	
-			
+
 		}
 	}	
 
@@ -89,50 +84,60 @@ if (anmd_taper_Data.comp){
 	// 2 - Else if no path selected look for taper layers and toggle on / off
 	else
 	{
+	
+		if(anmd_taper_Data.taperLayers.length > 0){
+			anmd_taper_Data.exists = true;
+		}else{
+			anmd_taper_Data.exists = false;
+		}
 
-
-			// on or off? Get from first in array - Had
+		// 2.1 if taper layer found
+		if(anmd_taper_Data.exists == true){
+			
+			// on or off? Get from first in array
 			anmd_taper_Data.onOff = anmd_taper_Data.taperLayers[0].enabled;
 
 			var taperedLayers = anmd_taper_Data.taperLayers;
 			for (var i=0; i < taperedLayers.length; i++) {
 
-				// iterate through properties
-				taperedLayers[i].property("ADBE Root Vectors Group")
-
-				//var numProps = rootProp.numProperties;
-				writeLn(" - "+rootProp);
-
-				// for (var j=0; j <= numProps; j++) {
-
-				// 		//propName = rootProp[j].name;
-				// 		results = propName.indexOf(anmd_taper_Data.taperGroupName);
-				// 		writeLn(" - " + j);
-
-				// 		if (results > -1) {
-							
-						
-				// 		}
-
-				// }
-
-
 				// 2.1.1 - If tapers off then turn on
 				if(anmd_taper_Data.onOff == true){	
 					anmd_taper_Data.taperLayers[i].enabled = false;
-					//writeLn("taper layer shown");
+					writeLn("taper layer shown");
 				}
 				// 2.1.2 - Else if tapers on then turn off
 				else{
 					anmd_taper_Data.taperLayers[i].enabled = true;
-					//writeLn("taper layer hidden");
+					writeLn("taper layer hidden");
 				}	
 			
 			}
 
+		}
+		// 2.2 else if no taper layer found
+		else
+		{
+		}
 	}
 }
 
+function lookforPropertyAndReturnInArray(arrayToSearch, searchTerm){
+
+	var a = [1,1];
+	
+	for (var i=1; i <= arrayToSearch.length; i++) {
+		labelColour = arrayToSearch[i].label;
+
+		if (labelColour == 14) {
+			
+			a.push(arrayToSearch[i])
+
+		}
+	}	
+
+	return a;
+
+}
 
 // function anmd_taper_findTrackingNulls(){
 	
