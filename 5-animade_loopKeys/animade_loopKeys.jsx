@@ -1,79 +1,70 @@
 ﻿// ∞
-// anmd_onion.jsx
+//
+// anmd_loopKeys.jsx
 // Copyright (c) 2016 animade. All rights reserved.
 // www.animade.tv
 // 
-// Name:  anmd_onion
-// Version: See Var
+// Name:  anmd_loopKeys
+// Version: 1.0.0
 // 
 // Description:
-// This is the starting block for the animade tool popups
+// Loop out keyframe animation with a click of a button
 // 
-
-// anmd_scriptName()
-// 
-// Description:
-// This function contains the main logic for this script.
-// 
-// Parameters:
-// thisObj - "this" object.
-// 
-// Returns:
-// Nothing.
-//
 
 // Globals
 
-var anmd_onion_Data = new Object();	// Store globals in an object
+var anmd_loopKeys_Data = new Object();	// Store globals in an object
 
-// Set the version
-anmd_onion_Data.scriptName = 'Animade Tools - Onion Skin';
-anmd_onion_Data.version = '1.0.0';
+anmd_loopKeys_Data.comp = app.project.activeItem;
 
-writeLn(anmd_onion_Data.scriptName + " - " + anmd_onion_Data.version);
+// Expressions
+anmd_loopKeys_Data.ex_1 = 
+	"// get time of first key\n"+
+	"firstKeyTime = key(1).time;\n"+
+	"\n"+
+	"// get time of last frame\n"+
+	"lastKeyTime = key(numKeys).time;\n"+
+	"\n"+
+	"// get duration of movment\n"+
+	"durationOfMovment = lastKeyTime  - firstKeyTime;\n"+
+	"\n"+
+	"// set value\n"+
+	"valueAtTime( ((time - firstKeyTime) % durationOfMovment) + firstKeyTime );\n"+
+	"\n"
+	;
 
-anmd_onion_Data.comp = app.project.activeItem;
-anmd_onion_Data.onOff = true;
-anmd_onion_Data.ex_1 = "";
-anmd_onion_Data.layerName = "Onion Skin";
-anmd_onion_Data.exists = false;
+// Alerts
+anmd_loopKeys_Data.alertNoPropertySelected = "Please selected a property to loop. eg 'Path'";
+anmd_loopKeys_Data.alertNoKeys = "You need more than 1 keyframe to loop";
+anmd_loopKeys_Data.alertAlreadyHasExpression = "I don't want to overwrite the current expression on this property";
 
-anmd_onion_Data.anmd_onion_stepsForward = 1;
-anmd_onion_Data.anmd_onion_stepsForward = 1;
 
-if (anmd_onion_Data.comp){
+if (anmd_loopKeys_Data.comp){
 
-	// Is there an onion layer target layer
-	var allLayers = anmd_onion_Data.comp.layers;
-	var onionLayer;
-	var steps;
+		// Set target layer
+		var targetLayer = anmd_loopKeys_Data.comp.selectedLayers[0];
 
-	// Look for onion Layer
-	for (var i=1; i <= allLayers.length; i++) {
-		if (allLayers[i].name == anmd_onion_Data.layerName) {
-			anmd_onion_Data.exists = true;
-			onionLayer = allLayers[i];
-			break;
-		}else{
-			anmd_onion_Data.exists = false;
+		// Set target property
+		var targetProp = targetLayer.selectedProperties[0];
+
+		// Dont allow multiple properties. Just pick the first one
+		if(targetLayer.selectedProperties.length>1){
+			targetProp = targetLayer.selectedProperties[1];
+		}else if(targetLayer.selectedProperties.length<=0){
+			alert(anmd_loopKeys_Data.alertNoPropertySelected);
 		}
-	}
 
-	// Create if it does not exist
-	if(!anmd_onion_Data.exists){
-		onionLayer = anmd_onion_Data.comp.layers.addSolid([240,240,90], "Onion Skin", anmd_onion_Data.comp.width, anmd_onion_Data.comp.height,1);;
-		onionLayer.name = anmd_onion_Data.layerName;
-		onionLayer.startTime = 0;
-		onionLayer.adjustmentLayer = true;
-		onionLayer.locked = false;	
-		onionLayer.label = 2;	
-		onionLayer.shy = true;	
-		onionLayer.property("Effects").addProperty("CC Wide Time");
-		allLayers = anmd_onion_Data.comp.layers;
-		onionLayer.moveBefore(allLayers[1]);
-	}else{
-		onionLayer.enabled = !onionLayer.enabled;
-		onionLayer.moveBefore(allLayers[1]);
-	}
+		if(!targetProp.expression){
+			if(targetProp.numKeys > 1){
+				targetProp.expression = anmd_loopKeys_Data.ex_1;
+			}else{
+				alert(anmd_loopKeys_Data.alertNoKeys);
+			}
+		}else{
+			alert(anmd_loopKeys_Data.alertAlreadyHasExpression);
+		}
 
 }
+
+
+
