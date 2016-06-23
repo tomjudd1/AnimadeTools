@@ -38,7 +38,6 @@ anmd_loopKeys_Data.alertNoPropertySelected = "Please selected a property to loop
 anmd_loopKeys_Data.alertNoKeys = "You need more than 1 keyframe to loop";
 anmd_loopKeys_Data.alertAlreadyHasExpression = "I don't want to overwrite the current expression on this property";
 
-
 if (anmd_loopKeys_Data.comp){
 
 		// Set target layer
